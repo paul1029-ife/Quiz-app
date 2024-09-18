@@ -11,7 +11,7 @@ export default function QuizCard() {
   const [feedback, setFeedback] = useState("");
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [showQuiz, setShowQuiz] = useState(true);
-
+  const[correctAnswers, setCorrectAnswers] = useState(0)
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswerClick = (answer) => {
@@ -20,6 +20,9 @@ export default function QuizCard() {
       answer === currentQuestion.correctAnswer
         ? "Correct!"
         : "Incorrect, try again!"
+    );
+    setCorrectAnswers(
+        answer === currentQuestion.correctAnswer ? correctAnswers + 1 :  correctAnswers
     );
   };
 
@@ -82,7 +85,10 @@ export default function QuizCard() {
           </div>
         </div>
       ) : (
-        <div>You have completed this quiz🥳</div>
+        <div className="flex flex-col rounded-2xl w-96 bg-[#ffffff] shadow-xl p-5">
+            <div>You have completed this quiz🥳</div>
+            <div>Your score is <span className="text-green-600 text-2xl ">{correctAnswers} / {questions.length}</span></div>
+        </div>
       )}
     </>
   );
