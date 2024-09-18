@@ -9,10 +9,11 @@ export default function QuizCard() {
   );
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [showQuiz, setShowQuiz] = useState(true);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [showQuiz, setShowQuiz] = useState(true);
 
   const currentQuestion = questions[currentQuestionIndex];
+
   const handleAnswerClick = (answer) => {
     setUserAnswer(answer);
     setFeedback(
@@ -22,25 +23,26 @@ export default function QuizCard() {
     );
   };
 
+  const handleNextQuestion = () => {
+    // Add current question to answered questions
+    setAnsweredQuestions((prev) => [...prev, currentQuestionIndex]);
 
+    // Check if all questions have been answered
+    if (answeredQuestions.length + 1 === questions.length) {
+      setShowQuiz(false);
+      return;
+    }
 
-const handleNextQuestion = () => {
-  if (answeredQuestions.length === questions.length) {
-    setShowQuiz(false); // Quiz is over
-    return;
-  }
+    // Select the next question that hasn't been answered yet
+    let nextQuestionIndex;
+    do {
+      nextQuestionIndex = Math.floor(Math.random() * questions.length);
+    } while (answeredQuestions.includes(nextQuestionIndex));
 
-  let nextQuestionIndex;
-  do {
-    nextQuestionIndex = Math.floor(Math.random() * questions.length);
-  } while (answeredQuestions.includes(nextQuestionIndex));
-
-  setAnsweredQuestions([...answeredQuestions, currentQuestionIndex]);
-  setCurrentQuestionIndex(nextQuestionIndex);
-  setUserAnswer(""); // Reset the selected answer
-  setFeedback(""); // Reset the feedback
-};
-
+    setCurrentQuestionIndex(nextQuestionIndex);
+    setUserAnswer(""); // Reset the selected answer
+    setFeedback(""); // Reset the feedback
+  };
 
   const getButtonStyle = (answer) => {
     if (userAnswer === "") return "bg-gray-600"; // Default button color
